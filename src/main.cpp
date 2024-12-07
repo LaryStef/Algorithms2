@@ -31,9 +31,12 @@ public:
         // Проверяем, существует ли вершина с таким именем
         for (Vertex vertex : vertices) {
             if (vertex.name == name) {
-                throw invalid_argument("Vertex with given name already exists.");
+                cout << "Vertex with given name already exists." << endl;
+                return;
             }
         }
+
+        
 
         // Добавляем новую вершину
         int index = vertices.size();
@@ -54,7 +57,15 @@ public:
         int from = findVertexIndex(v);
         int to = findVertexIndex(w);
         if (from == -1 || to == -1) {
-            throw invalid_argument("Vertex with given name does not exist.");
+            cout << "Vertex with given name does not exist." << endl;
+            return;
+        }
+
+        for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
+            if (incidenceMatrix[from][i] != 0 && incidenceMatrix[to][i] != 0) {
+                cout << "Edge with given name already exists." << endl;
+                return;
+            }
         }
 
         for (int i = 0; i < incidenceMatrix.size(); ++i) {
@@ -73,13 +84,14 @@ public:
     void del_v(string name) {
         int index = findVertexIndex(name);
         if (index == -1) {
-            throw invalid_argument("Vertex with given name does not exist.");
+            cout << "Vertex with given name does not exist." << endl;
+            return;
         }
 
         for (int incidence : incidenceMatrix[index]) {
             if (incidence != 0) {
-                cout << incidence << endl;
-                throw invalid_argument("Vertex has incident edges.");
+                cout << "Vertex has incident edges." << endl;
+                return;
             }
         }
         vertices.erase(vertices.begin() + index);
@@ -87,14 +99,11 @@ public:
     }
 
     void del_e(string v, string w) {
-        if (incidenceMatrix.size() == 0 || incidenceMatrix[0].size() == 0) {
-            throw invalid_argument("Cannot delete edge from empty graph.");
-        }
-
         int from = findVertexIndex(v);
         int to = findVertexIndex(w);
         if (from == -1 || to == -1) {
-            throw invalid_argument("Edge with given name does not exist.");
+                cout << "Edge with given name does not exist." << endl;
+                return;
         }
 
         for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
