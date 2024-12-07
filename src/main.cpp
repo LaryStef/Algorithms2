@@ -22,7 +22,7 @@ private:
                 return i;
             }
         }
-        return -1;
+        throw invalid_argument("Vertex with given name does not exist.");
     }
 
 public:
@@ -47,10 +47,14 @@ public:
     }
 
     void add_e(string v, string w, int c) {
-        int from = findVertexIndex(v);
-        int to = findVertexIndex(w);
-        if (from == -1 || to == -1) {
-            cout << "Vertex with given name does not exist." << endl;
+        int from;
+        int to;
+        try {
+            from = findVertexIndex(v);
+            to = findVertexIndex(w);
+        }
+        catch (invalid_argument e) {
+            cout << e.what() << endl;
             return;
         }
 
@@ -75,9 +79,12 @@ public:
     }
 
     void del_v(string name) {
-        int index = findVertexIndex(name);
-        if (index == -1) {
-            cout << "Vertex with given name does not exist." << endl;
+        int index;
+        try {
+            index = findVertexIndex(name);
+        }
+        catch (invalid_argument e) {
+            cout << e.what() << endl;
             return;
         }
 
@@ -92,11 +99,15 @@ public:
     }
 
     void del_e(string v, string w) {
-        int from = findVertexIndex(v);
-        int to = findVertexIndex(w);
-        if (from == -1 || to == -1) {
-                cout << "Edge with given name does not exist." << endl;
-                return;
+        int from;
+        int to;
+        try {
+            from = findVertexIndex(v);
+            to = findVertexIndex(w);
+        }
+        catch (invalid_argument e) {
+            cout << e.what() << endl;
+            return;
         }
 
         for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
@@ -109,9 +120,12 @@ public:
     }
 
     void edit_v(string name, string newMark) {
-        int index = findVertexIndex(name);
-        if (index == -1) {
-            cout << "Vertex with given name does not exist." << endl;
+        int index;
+        try {
+            index = findVertexIndex(name);
+        }
+        catch (invalid_argument e) {
+            cout << e.what() << endl;
             return;
         }
 
@@ -119,10 +133,14 @@ public:
     }
 
     void edit_e(string v, string w, int newC) {
-        int from = findVertexIndex(v);
-        int to = findVertexIndex(w);
-        if (from == -1 || to == -1) {
-            cout << "Edge with given name does not exist." << endl;
+        int from;
+        int to;
+        try {
+            from = findVertexIndex(v);
+            to = findVertexIndex(w);
+        }
+        catch (invalid_argument e) {
+            cout << e.what() << endl;
             return;
         }
 
@@ -138,9 +156,12 @@ public:
     int get_first_index(string name) { return get_next_index(name, -1); }
 
     int get_next_index(string name, int index) {
-        int vertexIndex = findVertexIndex(name);
-        if (vertexIndex == -1) {
-            cout << "Vertex with given name does not exist." << endl;
+        int vertexIndex;
+        try {
+            vertexIndex = findVertexIndex(name);
+        }
+        catch (invalid_argument e) {
+            cout << e.what() << endl;
             return -1;
         }
 
