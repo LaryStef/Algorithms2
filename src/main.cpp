@@ -9,7 +9,6 @@ using namespace std;
 class DirectedGraph {
 private:
     struct Vertex {
-        int index;
         string name;
         string mark;
     };
@@ -36,20 +35,14 @@ public:
             }
         }
 
-        
-
-        // Добавляем новую вершину
-        int index = vertices.size();
-
         Vertex newVertex;
-        newVertex.index = index; // Присваиваем индекс как текущий размер списка вершин
         newVertex.name = name;
         newVertex.mark = mark;
         vertices.push_back(newVertex);
 
         incidenceMatrix.push_back(vector<int>());
         for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
-            incidenceMatrix[index].push_back(0);
+            incidenceMatrix[vertices.size()].push_back(0);
         }
     }
 
@@ -63,7 +56,7 @@ public:
 
         for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
             if (incidenceMatrix[from][i] != 0 && incidenceMatrix[to][i] != 0) {
-                cout << "Edge with given name already exists." << endl;
+                cout << "Edge already exists." << endl;
                 return;
             }
         }
@@ -115,18 +108,79 @@ public:
         }
     }
 
-    void printGraph() {
+    void edit_v(string name, string newMark) {
+        int index = findVertexIndex(name);
+        if (index == -1) {
+            cout << "Vertex with given name does not exist." << endl;
+            return;
+        }
+
+        vertices[index].mark = newMark;
+    }
+
+    void edit_e(string v, string w, int newC) {
+        int from = findVertexIndex(v);
+        int to = findVertexIndex(w);
+        if (from == -1 || to == -1) {
+            cout << "Edge with given name does not exist." << endl;
+            return;
+        }
+
+        for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
+            if (incidenceMatrix[from][i] != 0 && incidenceMatrix[to][i] != 0) {
+                incidenceMatrix[from][i] = newC;
+                incidenceMatrix[to][i] = -newC;
+                return;
+            }
+        }
+    }
+
+    int get_first_index(string name) { return get_next_index(name, -1); }
+
+    int get_next_index(string name, int index) {
+        int vertexIndex = findVertexIndex(name);
+        if (vertexIndex == -1) {
+            cout << "Vertex with given name does not exist." << endl;
+            return -1;
+        }
+
+        for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
+            if (incidenceMatrix[vertexIndex][i] != 0) {
+                if (index >= 0) {
+                    index -= 1;
+                    continue;
+                }
+                for (int j = 0; j < incidenceMatrix.size(); ++j) {
+                    if (incidenceMatrix[j][i] != 0) {
+                        return j;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    string get_vertex(string name, int i) { return vertices[get_next_index(name, i - 1)].name; }
+
+    void print_graph() {
         cout << "Vertices:\n";
         for (Vertex vertex : vertices) {
-            cout << vertex.index << ": " << vertex.name << " (" << vertex.mark << ")\n";
+            cout << vertex.name << " (" << vertex.mark << ")\n";
         }
         cout << "\nIncidence Matrix:\n";
-        for (vector<int> row : incidenceMatrix) {
-            for (int weight : row) {
-                cout << weight << " ";
-            }
-            cout << "\n";
+        cout << "  ";
+        for (int i = 0; i < incidenceMatrix[0].size(); ++i) {
+            cout << i << " ";
         }
+
+        for (int i = 0; i < incidenceMatrix.size(); ++i) {
+            cout << endl;
+            cout << vertices[i].name << " ";
+            for (int j = 0; j < incidenceMatrix[i].size(); ++j) {
+                cout << incidenceMatrix[i][j] << " ";
+            }
+        }
+        cout << endl << endl;
     }
 };
 
@@ -138,19 +192,18 @@ int main() {
     graph.add_v("C", "Mark C");
     graph.add_v("D", "Mark D");
 
-
     graph.add_e("A", "B", 7);
     graph.add_e("B", "C", 3);
     graph.add_e("C", "D", 5);
     graph.add_e("D", "A", 1);
 
-    graph.del_e("A", "B");
-    graph.printGraph();
-    graph.del_e("B", "C");
-    graph.printGraph();
-    graph.del_v("B");
+    graph.edit_v("A", "New Mark A");
+    graph.edit_e("A", "B", 10);
+    graph.print_graph();
 
-    graph.printGraph();
+    cout << graph.get_first_index("D") << endl;
+    cout << graph.get_next_index("D", 0) << endl;
+    cout << graph.get_vertex("D", 0) << endl;
 
     return 0;
 }
