@@ -39,13 +39,13 @@ void find_paths(vector<vector<int>> weights_matrix, vector<string> alphabet) {
     }
     graph.print_graph();
 
-    int x, n = 6;
-    cout << "Enter the path length x: ";
-    cin >> x;
+    int length;
+    cout << "Enter the path length: ";
+    cin >> length;
 
-    cout << "All non-cyclic paths of length " << x << ":" << endl;
-    for (int vertexIndex = 0; vertexIndex < n; ++vertexIndex) {
+    cout << "All non-cyclic paths of length " << length << ":" << endl;
+    for (int vertexIndex = 0; vertexIndex < weights_matrix.size(); ++vertexIndex) {
         vector<string> path = {alphabet[vertexIndex]};
-        find_paths_from_vertex(graph, alphabet[vertexIndex], path, x);
+        find_paths_from_vertex(graph, alphabet[vertexIndex], path, length);
     }
 }
