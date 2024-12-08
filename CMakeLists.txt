@@ -9,4 +9,6 @@ include_directories(include)
 add_executable(
     graph_test
     src/main.cpp
+    src/directed_graph.cpp
+    src/find_paths.cpp
 )
