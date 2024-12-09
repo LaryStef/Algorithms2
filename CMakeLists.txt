@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 add_executable(
-    graph_test
+    graph
     src/main.cpp
     src/directed_graph.cpp
     src/find_paths.cpp
