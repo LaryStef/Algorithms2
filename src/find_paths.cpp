@@ -16,7 +16,7 @@ void find_paths_from_vertex(DirectedGraph graph, string vertex, vector<string>& 
 
     int offset = -1;
     while (graph.get_next_index(vertex, offset) != -1) {
-        offset ++;
+        offset++;
         string nextVertex = graph.get_vertex(vertex, offset);
         path.push_back(nextVertex);
         find_paths_from_vertex(graph, nextVertex, path, targetLength);
